@@ -2,6 +2,7 @@
 echo "Realizando build de todas imagens para o projeto Fundamentals 2"
 version=${version:-1.1}
 builder=podman
+REPO_URL=${REPO_URL:-quay.io/gscheffe}
 
 # Verifica se o comando podman está disponível
 if command -v podman &> /dev/null; then
@@ -17,6 +18,6 @@ else
     fi
 fi
 
-$builder build -t quay.io/gscheffe/dio-frontend:$version frontend/.
-$builder build -t quay.io/gscheffe/dio-backend:$version backend/.
-$builder build -t quay.io/gscheffe/dio-db:$version db/.
+$builder build -t $REPO_URL/dio-frontend:$version frontend/.
+$builder build -t $REPO_URL/dio-backend:$version backend/.
+$builder build -t $REPO_URL/dio-db:$version db/.
