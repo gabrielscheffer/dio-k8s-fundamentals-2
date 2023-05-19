@@ -22,6 +22,6 @@ else
 fi
 
 $builder login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $REPO_URL
-$builder push quay.io/gscheffe/dio-frontend:$version
-$builder push quay.io/gscheffe/dio-backend:$version
-$builder push quay.io/gscheffe/dio-db:$version
+$builder push $REPO_URL/dio-frontend:$version
+$builder push $REPO_URL/dio-backend:$version
+$builder push $REPO_URL/dio-db:$version
