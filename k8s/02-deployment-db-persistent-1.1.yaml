@@ -1,0 +1,57 @@
+### CREATE PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-db-pvc-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+### DEPLOY DATABASE
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dio-db
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: dio-db
+  template:
+    metadata:
+      labels:
+        app: dio-db
+        version: "1.1"
+    spec:
+      containers:
+      - image: quay.io/gscheffe/dio-db:1.1
+        name: mariadb
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dio-db
+              key: ROOT_PASSWORD      
+        - name: MARIADB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: dio-db
+              key: MARIADB_DATABASE
+        ports:
+        - containerPort: 3306
+          name: mariadb
+        
+        volumeMounts:
+        - name: local-db
+          mountPath: /var/lib/mysql
+      volumes:
+       - name: local-db
+         persistentVolumeClaim:
+          claimName: local-db-pvc-claim

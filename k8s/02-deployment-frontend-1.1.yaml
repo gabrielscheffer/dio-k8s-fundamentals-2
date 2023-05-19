@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-nginx
+  template:
+    metadata:
+      labels:
+        app: frontend-nginx
+        version: "1.1"
+    spec:
+      containers:
+      - name: frontend
+        image: quay.io/gscheffe/dio-frontend:1.1
+        env:
+        - name: API_URL
+          value: http://backend:8080
+        ports:
+        - containerPort: 80
